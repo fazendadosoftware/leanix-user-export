@@ -109,5 +109,5 @@ for row in ws.values:
   permission['role'] = role
   permission['customerRoles'] = customer_roles
   permission['accessControlEntities'] = access_control_entities
-  print('Updating permission {id} {username} ({i}/{total})'.format(id=permission_id, username=username, i=i, total=ws.max_row))
+  print('Updating permission {id} {username} ({i}/{total})'.format(id=permission_id, username=username, i=i, total=ws.max_row - 1))
   update_permission(access_token, permission)
