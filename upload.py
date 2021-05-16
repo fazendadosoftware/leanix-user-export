@@ -69,7 +69,30 @@ def update_permission(access_token, permission):
     raise
   data = response.json()['data']
   return data
-  
+
+def fetch_user_by_id(access_token, user_id):
+  url = mtm_base_url + "/users/" + user_id
+  headers = { 'Authorization': 'Bearer ' + access_token }
+  response = requests.get(url=url, headers=headers)
+  response.raise_for_status()
+  user = response.json()['data']
+  return user
+
+def update_user(access_token, user):
+  url = mtm_base_url + "/users/" + user_id
+  headers = {
+    'Authorization': 'Bearer ' + access_token,
+    'Content-Type': 'application/json'
+  }
+  response = requests.put(url=url, headers=headers, data=json.dumps(user))
+  try:
+    response.raise_for_status()
+  except:
+    print('Exception: ' + str(response.status_code) + ' ' + response.text)
+    raise
+  data = response.json()['data']
+  return data
+
 access_token = getAccessToken(getApiToken())
 
 workspaceName = getWorkspaceName(access_token, getWorkspaceId(getAccessTokenJson(access_token)))
@@ -101,7 +124,7 @@ for row in ws.values:
   # check if user id matches
   if permission['user']['id'] != user_id:
     raise Exception('Invalid user id, expected ' + user_id, ', got ' + permission['user']['id'])
-  permission['user']['userName'] = username
+  # permission['user']['userName'] = username
   permission['user']['email'] = email
   permission['user']['firstName'] = first_name
   permission['user']['lastName'] = last_name
@@ -109,5 +132,9 @@ for row in ws.values:
   permission['role'] = role
   permission['customerRoles'] = customer_roles
   permission['accessControlEntities'] = access_control_entities
-  print('Updating permission {id} {username} ({i}/{total})'.format(id=permission_id, username=username, i=i, total=ws.max_row - 1))
+  if permission['user']['userName'] != username:
+    user = fetch_user_by_id(access_token, user_id)
+    user['userName'] = username
+    update_user(access_token, user)
+  print('Updated permission {id} {username} ({i}/{total})'.format(id=permission_id, username=username, i=i, total=ws.max_row - 1))
   update_permission(access_token, permission)
