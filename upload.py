@@ -124,7 +124,11 @@ for row in ws.values:
   # check if user id matches
   if permission['user']['id'] != user_id:
     raise Exception('Invalid user id, expected ' + user_id, ', got ' + permission['user']['id'])
-  # permission['user']['userName'] = username
+  if permission['user']['userName'] != username:
+    user = fetch_user_by_id(access_token, user_id)
+    user['userName'] = username
+    update_user(access_token, user)
+  permission['user']['userName'] = username
   permission['user']['email'] = email
   permission['user']['firstName'] = first_name
   permission['user']['lastName'] = last_name
@@ -132,9 +136,5 @@ for row in ws.values:
   permission['role'] = role
   permission['customerRoles'] = customer_roles
   permission['accessControlEntities'] = access_control_entities
-  if permission['user']['userName'] != username:
-    user = fetch_user_by_id(access_token, user_id)
-    user['userName'] = username
-    update_user(access_token, user)
   print('Updated permission {id} {username} ({i}/{total})'.format(id=permission_id, username=username, i=i, total=ws.max_row - 1))
   update_permission(access_token, permission)
