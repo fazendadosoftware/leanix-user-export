@@ -8,6 +8,11 @@ import os
 import sys
 import math
 
+# https://docs.python-requests.org/en/latest/user/advanced/#proxies
+# uncomment lines below for setting up proxy operation
+# os.environ["HTTP_PROXY"] = "http://127.0.0.1:1234"
+# os.environ["HTTPS_PROXY"] = "https://127.0.0.1:1234"
+
 def getApiToken():
     with open('./lxr.json') as json_file:
         data = json.load(json_file)
@@ -19,6 +24,7 @@ def getHost():
         return data['host']
 
 def getAccessToken(api_token):
+    print(os.environ["DEBUSSY"])
     url = mtm_base_url+"/oauth2/token"
     response = requests.post(url=url, auth=('apitoken', api_token), data={'grant_type': 'client_credentials'})
     response.raise_for_status()

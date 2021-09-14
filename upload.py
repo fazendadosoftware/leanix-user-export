@@ -6,6 +6,11 @@ from openpyxl import load_workbook
 
 FILENAME = 'upload.xlsx'
 
+# https://docs.python-requests.org/en/latest/user/advanced/#proxies
+# uncomment lines below for setting up proxy operation
+# os.environ["HTTP_PROXY"] = "http://127.0.0.1:1234"
+# os.environ["HTTPS_PROXY"] = "https://127.0.0.1:1234"
+
 def getHost():
   with open('./lxr.json') as json_file:
     data = json.load(json_file)
