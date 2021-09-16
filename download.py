@@ -24,7 +24,6 @@ def getHost():
         return data['host']
 
 def getAccessToken(api_token):
-    print(os.environ["DEBUSSY"])
     url = mtm_base_url+"/oauth2/token"
     response = requests.post(url=url, auth=('apitoken', api_token), data={'grant_type': 'client_credentials'})
     response.raise_for_status()
