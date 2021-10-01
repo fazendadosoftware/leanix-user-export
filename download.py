@@ -53,7 +53,7 @@ def getWorkspaceName(access_token, workspaceId):
 def getWorkspacePermissions(access_token, page = 1, size = 40):
   workspace_id = getWorkspaceId(getAccessTokenJson(access_token))
   url = mtm_base_url + "/workspaces/" + workspace_id + "/permissions"
-  params = { 'page': page, 'size': size, 'status': '!ARCHIVED' }
+  params = { 'page': page, 'size': size, 'status': '!ARCHIVED', 'sort': 'lastLogin-asc' }
   headers = { 'Authorization': 'Bearer ' + access_token, 'Content-Type': 'application/json' }
   print('Fetching permissions page 1...')
   response = callGet(url, headers, params)
